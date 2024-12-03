@@ -29,37 +29,61 @@ public class DayTwo {
         }
     }
 
-    public static void partOne() throws IOException {
-        loadNumbers();
+    public static void partOne() {
         AtomicInteger output = new AtomicInteger();
         numbers.forEach(list -> {
-            var isValid = isIncreasingOrDecreasing(list);
+            var isValid = isIncreasingOrDecreasing(list) && isValidLevel(list);
             if (isValid) {
-                var left = 0;
-                var right = list.size() - 1;
+                output.incrementAndGet();
+            }
 
-                while (left < right) {
-                    var valOne = list.get(left);
-                    var valTwo = list.get(right);
-                    var nextLeft = list.get(left + 1);
-                    var nextRight = list.get(right - 1);
+        });
 
-                    if (nextLeft.equals(valOne) || nextRight.equals(valTwo)) {
-                        isValid = false;
+        System.out.println(output.get());
+    }
+
+    private static boolean isValidLevel(List<Integer> list) {
+        var left = 0;
+        var right = list.size() - 1;
+
+        while (left < right) {
+            var valOne = list.get(left);
+            var valTwo = list.get(right);
+            var nextLeft = list.get(left + 1);
+            var nextRight = list.get(right - 1);
+
+            if (nextLeft.equals(valOne) || nextRight.equals(valTwo)) {
+                return false;
+            }
+
+            if (valOne > valTwo) {
+                if (valOne - nextLeft > 3 || nextRight - valTwo > 3) {
+                    return false;
+                }
+            } else {
+                if (nextLeft - valOne > 3 || valTwo - nextRight > 3) {
+                    return false;
+                }
+            }
+
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+    public static void partTwo() {
+        AtomicInteger output = new AtomicInteger();
+        numbers.forEach(list -> {
+            var isValid = isIncreasingOrDecreasing(list) && isValidLevel(list);
+            if (!isValid) {
+                for (int i = 0; i < list.size(); i++) {
+                    var copy = new ArrayList<>(list);
+                    copy.remove(i);
+                    if (isIncreasingOrDecreasing(copy) && isValidLevel(copy)) {
+                        isValid = true;
+                        break;
                     }
-
-                    if (valOne > valTwo) {
-                        if (valOne - nextLeft > 3 || nextRight - valTwo > 3) {
-                            isValid = false;
-                        }
-                    } else {
-                        if (nextLeft - valOne > 3 || valTwo - nextRight > 3) {
-                            isValid = false;
-                        }
-                    }
-
-                    left++;
-                    right--;
                 }
             }
 
@@ -73,7 +97,9 @@ public class DayTwo {
     }
 
     public static void main(String[] args) throws IOException {
+        loadNumbers();
         partOne();
+        partTwo();
     }
 
     private static boolean isIncreasingOrDecreasing(List<Integer> list) {
