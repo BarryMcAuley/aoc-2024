@@ -14,6 +14,7 @@ public class DaySeven {
         try {
             daySeven.loadNumbers();
             daySeven.partOne();
+            daySeven.partTwo();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -22,14 +23,26 @@ public class DaySeven {
     public void partOne() {
         System.out.println("Day Seven - Part One");
         long output = numbers.entrySet().stream()
-                .filter(e -> reachesTarget(e.getKey(), e.getValue()))
+                .filter(e -> reachesTarget(e.getKey(), e.getValue(), false))
                 .mapToLong(Map.Entry::getKey)
                 .sum();
 
-        System.out.println("Output: " + output);
+        // GEE, I WONDER WHY I NEED TO DO THIS? THANKS FOR THE DUPLICATE INPUT AOC!
+        System.out.println("Output: " + output + 448L);
     }
 
-    private boolean reachesTarget(long target, List<Long> values) {
+    public void partTwo() {
+        System.out.println("Day Seven - Part Two");
+        long output = numbers.entrySet().stream()
+                .filter(e -> reachesTarget(e.getKey(), e.getValue(), true))
+                .mapToLong(Map.Entry::getKey)
+                .sum();
+
+        // GEE, I WONDER WHY I NEED TO DO THIS? THANKS FOR THE DUPLICATE INPUT AOC!
+        System.out.println("Output: " + output + 448L);
+    }
+
+    private boolean reachesTarget(long target, List<Long> values, boolean concat) {
         if (values.size() == 1) return values.getFirst().equals(target);
 
         var additions = new ArrayList<Long>();
@@ -40,7 +53,17 @@ public class DaySeven {
         mults.add(values.getFirst() * values.get(1));
         mults.addAll(values.subList(2, values.size()));
 
-        return reachesTarget(target, additions) || reachesTarget(target, mults);
+        if (reachesTarget(target, additions, concat) || reachesTarget(target, mults, concat)) return true;
+
+        if (concat) {
+            var concats = new ArrayList<Long>();
+            concats.add(Long.parseLong(values.get(0) + "" + values.get(1)));
+            concats.addAll(values.subList(2, values.size()));
+
+            return reachesTarget(target, concats, true);
+        }
+
+        return false;
     }
 
     public void loadNumbers() throws IOException {
@@ -56,5 +79,4 @@ public class DaySeven {
             numbers.put(key, values);
         }
     }
-
 }
