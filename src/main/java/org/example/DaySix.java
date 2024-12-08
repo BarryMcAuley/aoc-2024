@@ -34,11 +34,11 @@ enum Direction {
     }
 }
 
-class Point {
+class DaySixPoint {
     int x, y;
     Direction direction;
 
-    Point(int x, int y, Direction direction) {
+    DaySixPoint(int x, int y, Direction direction) {
         this.x = x;
         this.y = y;
         this.direction = direction;
@@ -48,7 +48,7 @@ class Point {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        Point other = (Point) obj;
+        DaySixPoint other = (DaySixPoint) obj;
         return x == other.x && y == other.y && direction == other.direction;
     }
 
@@ -60,7 +60,7 @@ class Point {
 
 public class DaySix {
     private final List<List<Character>> grid = new ArrayList<>();
-    private final Queue<Point> toAddObstacle = new LinkedList<>();
+    private final Queue<DaySixPoint> toAddObstacle = new LinkedList<>();
     private int startX;
     private int startY;
 
@@ -121,14 +121,14 @@ public class DaySix {
             if (grid.get(x).get(y) != 'X') {
                 output++;
                 grid.get(x).set(y, 'X');
-                toAddObstacle.add(new Point(x, y, currDirection));
+                toAddObstacle.add(new DaySixPoint(x, y, currDirection));
             }
 
             x += currDirection.dx();
             y += currDirection.dy();
         }
         grid.get(x).set(y, 'X');
-        toAddObstacle.add(new Point(x, y, currDirection));
+        toAddObstacle.add(new DaySixPoint(x, y, currDirection));
         output++;
 
         System.out.println(output);
