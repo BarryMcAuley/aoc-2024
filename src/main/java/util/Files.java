@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Files {
-    public static List<List<Character>> readLines(String filename) {
+    public static List<List<Character>> readGrid(String filename) {
         List<List<Character>> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;

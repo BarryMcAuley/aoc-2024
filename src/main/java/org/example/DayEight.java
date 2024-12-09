@@ -1,9 +1,9 @@
 package org.example;
 
 import util.Point;
+import util.Util;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DayEight {
 
@@ -18,14 +18,6 @@ public class DayEight {
         return x >= 0 && x < grid.size() && y >= 0 && y < grid.getFirst().size();
     }
 
-    private void printGrid(List<List<Character>> grid) {
-        System.out.println("Grid:");
-        grid.forEach(row -> System.out.println(
-                row.stream()
-                        .map(String::valueOf)
-                        .collect(Collectors.joining())
-        ));
-    }
 
     private Map<Character, List<Point>> loadAntennae(List<List<Character>> grid) {
         var antennae = new HashMap<Character, List<Point>>();
@@ -42,21 +34,21 @@ public class DayEight {
 
     public void partOne() {
         System.out.println("Part One");
-        var grid = util.Files.readLines("src/main/resources/dayeight.txt");
+        var grid = util.Files.readGrid("src/main/resources/dayeight.txt");
         var antennae = loadAntennae(grid);
         var antinodes = getAntinodes(antennae, grid, false);
 
-        printGrid(grid);
+        Util.printGrid(grid);
         System.out.println(antinodes.size());
     }
 
     private void partTwo() {
         System.out.println("Part Two");
-        var grid = util.Files.readLines("src/main/resources/dayeight.txt");
+        var grid = util.Files.readGrid("src/main/resources/dayeight.txt");
         var antennae = loadAntennae(grid);
         var antinodes = getAntinodes(antennae, grid, true);
 
-        printGrid(grid);
+        Util.printGrid(grid);
         System.out.println(antinodes.size());
     }
 
