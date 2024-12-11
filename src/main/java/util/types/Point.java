@@ -1,4 +1,4 @@
-package util;
+package util.types;
 
 public record Point(int x, int y) {
     public Point subtract(Point other) {

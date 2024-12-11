@@ -1,9 +1,13 @@
 package org.example;
 
-import util.Point;
-import util.Util;
+import util.FileUtil;
+import util.types.Grid;
+import util.types.Point;
 
+import java.io.IOException;
 import java.util.*;
+
+import static util.Util.isInBounds;
 
 public class DayEight {
 
@@ -14,18 +18,13 @@ public class DayEight {
         dayEight.partTwo();
     }
 
-    private boolean isInBounds(int x, int y, List<List<Character>> grid) {
-        return x >= 0 && x < grid.size() && y >= 0 && y < grid.getFirst().size();
-    }
-
-
-    private Map<Character, List<Point>> loadAntennae(List<List<Character>> grid) {
+    private Map<Character, List<Point>> loadAntennae(Grid<Character> grid) {
         var antennae = new HashMap<Character, List<Point>>();
         for (int i = 0; i < grid.size(); i++) {
-            for (int j = 0; j < grid.get(i).size(); j++) {
-                if (grid.get(i).get(j) != '.') {
-                    antennae.putIfAbsent(grid.get(i).get(j), new ArrayList<>());
-                    antennae.get(grid.get(i).get(j)).add(new Point(i, j));
+            for (int j = 0; j < grid.getRow(i).size(); j++) {
+                if (grid.getRow(i).get(j) != '.') {
+                    antennae.putIfAbsent(grid.getRow(i).get(j), new ArrayList<>());
+                    antennae.get(grid.getRow(i).get(j)).add(new Point(i, j));
                 }
             }
         }
@@ -34,25 +33,29 @@ public class DayEight {
 
     public void partOne() {
         System.out.println("Part One");
-        var grid = util.Files.readGrid("src/main/resources/dayeight.txt");
-        var antennae = loadAntennae(grid);
-        var antinodes = getAntinodes(antennae, grid, false);
-
-        Util.printGrid(grid);
-        System.out.println(antinodes.size());
+        try {
+            var grid = FileUtil.readGrid("src/main/resources/dayeight.txt", s -> s.charAt(0), "");
+            var antennae = loadAntennae(grid);
+            var antinodes = getAntinodes(antennae, grid, false);
+            System.out.println(antinodes.size());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void partTwo() {
         System.out.println("Part Two");
-        var grid = util.Files.readGrid("src/main/resources/dayeight.txt");
-        var antennae = loadAntennae(grid);
-        var antinodes = getAntinodes(antennae, grid, true);
-
-        Util.printGrid(grid);
-        System.out.println(antinodes.size());
+        try {
+            var grid = FileUtil.readGrid("src/main/resources/dayeight.txt", s -> s.charAt(0), "");
+            var antennae = loadAntennae(grid);
+            var antinodes = getAntinodes(antennae, grid, true);
+            System.out.println(antinodes.size());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private HashSet<Point> getAntinodes(Map<Character, List<Point>> antennae, List<List<Character>> grid, boolean resonantHarmonics) {
+    private HashSet<Point> getAntinodes(Map<Character, List<Point>> antennae, Grid<Character> grid, boolean resonantHarmonics) {
         var antinodes = new HashSet<Point>();
         for (var entry : antennae.entrySet()) {
             var points = entry.getValue();
@@ -86,17 +89,17 @@ public class DayEight {
         }
 
         for (var antinode : antinodes) {
-            if (grid.get(antinode.x()).get(antinode.y()) == '.') grid.get(antinode.x()).set(antinode.y(), '#');
+            if (grid.getRow(antinode.x()).get(antinode.y()) == '.') grid.getRow(antinode.x()).set(antinode.y(), '#');
         }
 
         return antinodes;
     }
 
-    private boolean validateAndAdd(Point antinode, List<List<Character>> map, Map<Character, List<Point>> antennae) {
-        if (isInBounds(antinode.x(), antinode.y(), map)) {
-            if (map.get(antinode.x()).get(antinode.y()) == '.') {
+    private boolean validateAndAdd(Point antinode, Grid<Character> grid, Map<Character, List<Point>> antennae) {
+        if (isInBounds(antinode.x(), antinode.y(), grid)) {
+            if (grid.getRow(antinode.x()).get(antinode.y()) == '.') {
                 return true;
-            } else return antennae.containsKey(map.get(antinode.x()).get(antinode.y()));
+            } else return antennae.containsKey(grid.getRow(antinode.x()).get(antinode.y()));
         }
         return false;
     }

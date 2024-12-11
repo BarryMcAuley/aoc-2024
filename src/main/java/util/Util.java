@@ -1,16 +1,10 @@
 package util;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import util.types.Grid;
 
 public class Util {
 
-    public static void printGrid(List<List<Character>> grid) {
-        System.out.println("Grid:");
-        grid.forEach(row -> System.out.println(
-                row.stream()
-                        .map(String::valueOf)
-                        .collect(Collectors.joining())
-        ));
+    public static <T> boolean isInBounds(int x, int y, Grid<T> grid) {
+        return x >= 0 && x < grid.size() && y >= 0 && y < grid.getRow(0).size();
     }
 }

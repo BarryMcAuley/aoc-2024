@@ -1,5 +1,7 @@
 package org.example;
 
+import util.types.Direction;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -7,32 +9,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-enum Direction {
-    NORTH(-1, 0),
-    EAST(0, 1),
-    SOUTH(1, 0),
-    WEST(0, -1);
-
-    private final int dx;
-    private final int dy;
-
-    Direction(int dx, int dy) {
-        this.dx = dx;
-        this.dy = dy;
-    }
-
-    public int dx() {
-        return dx;
-    }
-
-    public int dy() {
-        return dy;
-    }
-
-    public Direction turnRight() {
-        return values()[(ordinal() + 1) % 4];
-    }
-}
 
 class DaySixPoint {
     int x, y;
@@ -88,15 +64,6 @@ public class DaySix {
         }
     }
 
-    private void printGrid(List<ArrayList<Character>> grid) {
-        System.out.println("Grid:");
-        grid.forEach(row -> System.out.println(
-                row.stream()
-                        .map(String::valueOf)
-                        .collect(Collectors.joining())
-        ));
-    }
-
     private boolean isNotFinished(int x, int y) {
         return x != 0 && x != grid.size() - 1 && y != 0 && y != grid.getFirst().size() - 1;
     }
@@ -108,7 +75,7 @@ public class DaySix {
     public void partOne() {
         var grid = this.grid.stream().map(ArrayList::new).toList();
         var output = 0;
-        var currDirection = Direction.NORTH;
+        var currDirection = Direction.UP;
         var x = startX;
         var y = startY;
 
@@ -137,11 +104,11 @@ public class DaySix {
     private boolean hasLoop(int x, int y, List<List<Character>> grid) {
         var slowX = x;
         var slowY = y;
-        var slowDirection = Direction.NORTH;
+        var slowDirection = Direction.UP;
 
         var fastX = x;
         var fastY = y;
-        var fastDirection = Direction.NORTH;
+        var fastDirection = Direction.UP;
 
         while (isNotFinished(slowX, slowY) && isNotFinished(fastX, fastY)) {
             var slowMove = move(slowX, slowY, slowDirection, grid);
