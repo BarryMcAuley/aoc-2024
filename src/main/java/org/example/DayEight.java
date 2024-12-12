@@ -21,10 +21,10 @@ public class DayEight {
     private Map<Character, List<Point>> loadAntennae(Grid<Character> grid) {
         var antennae = new HashMap<Character, List<Point>>();
         for (int i = 0; i < grid.size(); i++) {
-            for (int j = 0; j < grid.getRow(i).size(); j++) {
-                if (grid.getRow(i).get(j) != '.') {
-                    antennae.putIfAbsent(grid.getRow(i).get(j), new ArrayList<>());
-                    antennae.get(grid.getRow(i).get(j)).add(new Point(i, j));
+            for (int j = 0; j < grid.get(i).size(); j++) {
+                if (grid.get(i).get(j) != '.') {
+                    antennae.putIfAbsent(grid.get(i).get(j), new ArrayList<>());
+                    antennae.get(grid.get(i).get(j)).add(new Point(i, j));
                 }
             }
         }
@@ -89,7 +89,7 @@ public class DayEight {
         }
 
         for (var antinode : antinodes) {
-            if (grid.getRow(antinode.x()).get(antinode.y()) == '.') grid.getRow(antinode.x()).set(antinode.y(), '#');
+            if (grid.get(antinode.x()).get(antinode.y()) == '.') grid.get(antinode.x()).set(antinode.y(), '#');
         }
 
         return antinodes;
@@ -97,9 +97,9 @@ public class DayEight {
 
     private boolean validateAndAdd(Point antinode, Grid<Character> grid, Map<Character, List<Point>> antennae) {
         if (isInBounds(antinode.x(), antinode.y(), grid)) {
-            if (grid.getRow(antinode.x()).get(antinode.y()) == '.') {
+            if (grid.get(antinode.x()).get(antinode.y()) == '.') {
                 return true;
-            } else return antennae.containsKey(grid.getRow(antinode.x()).get(antinode.y()));
+            } else return antennae.containsKey(grid.get(antinode.x()).get(antinode.y()));
         }
         return false;
     }

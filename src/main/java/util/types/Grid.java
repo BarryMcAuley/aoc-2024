@@ -20,7 +20,7 @@ public class Grid<T> {
         }
     }
 
-    public List<T> getRow(int x) {
+    public List<T> get(int x) {
         return grid.get(x);
     }
 
@@ -42,6 +42,10 @@ public class Grid<T> {
             }
         }
         return points;
+    }
+
+    public boolean isInBounds(int x, int y) {
+        return x >= 0 && x < this.size() && y >= 0 && y < this.get(0).size();
     }
 
     @Override
